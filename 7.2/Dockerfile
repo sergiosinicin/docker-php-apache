@@ -1,5 +1,5 @@
 FROM php:7.2-apache
-MAINTAINER bved <bve.develop@gmail.com>
+LABEL maintainer="BVE Develop <bve.develop@gmail.com>"
 
 RUN a2enmod rewrite
 
