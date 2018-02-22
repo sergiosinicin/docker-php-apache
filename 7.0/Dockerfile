@@ -1,6 +1,9 @@
 FROM php:7.0-apache
 LABEL maintainer="BVE Develop <bve.develop@gmail.com>"
 
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_USER_ID 33
+
 RUN a2enmod rewrite
 
 RUN set -xe \
@@ -11,13 +14,10 @@ RUN set -xe \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN set -xe \
-    && echo "#!/bin/bash" >> /bin/start.sh \
-    && echo "set -e" >> /bin/start.sh \
-    && echo "chown -R www-data:www-data /var/www/html" >> /bin/start.sh \
-    && echo "apache2-foreground" >> /bin/start.sh \
-    && chmod +x /bin/start.sh
+COPY docker-init.sh /bin/
+
+RUN chmod +x /bin/docker-init.sh
 
 EXPOSE 80
 
-CMD ["start.sh"]
+CMD ["docker-init.sh"]
